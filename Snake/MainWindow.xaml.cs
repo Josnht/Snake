@@ -111,7 +111,8 @@ namespace Snake
                 {
                     Image image = new Image
                     {
-                        Source = Texture.Empty
+                        Source = Texture.Empty,
+                        RenderTransformOrigin = new Point(0.5, 0.5)
                     };
                     images[r, c] = image;
                     GameGrid.Children.Add(image);
@@ -134,6 +135,7 @@ namespace Snake
             {
                 Map Gridval = state.Map[r, c];
                 gridImages[r, c].Source = gridToIMG[Gridval];
+                gridImages[r, c].RenderTransform = Transform.Identity;
             }
         }
     }
@@ -147,6 +149,17 @@ namespace Snake
             int Rotation = dirRotation[state.Dir];
             image.RenderTransform = new RotateTransform(Rotation);
         }
+    private async Task SnakeHeadDead()
+        {
+            List<Position> positions = new List<Position>(state.SnakePosition());
+            for (int i = 0; i < positions.Count; ++i) {
+                Position pos = positions[i];
+                ImageSource source = (i == 0) ? Texture.DeadHead : Texture.DeadBody;
+                gridImages[pos.Row, pos.Col].Source = source;
+                await Task.Delay(50);
+                    }
+        }
+
     private async Task Countdown()
         {
             for (int i=0; i < 3; ++i)
@@ -157,6 +170,7 @@ namespace Snake
         }
      private async Task GameOver()
         {
+            await SnakeHeadDead();
             await Task.Delay(1000);
             Over1ay.Visibility = Visibility.Visible;
             Over1ayText.Text = "PRESS ANY KEY TO START";
