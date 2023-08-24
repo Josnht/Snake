@@ -133,7 +133,7 @@ namespace Snake
         {
             for (int c= 0;c < cols; c++)
             {
-                Map Gridval = state.Map[r, c];
+                    Map Gridval = state.Grid[r, c];
                 gridImages[r, c].Source = gridToIMG[Gridval];
                 gridImages[r, c].RenderTransform = Transform.Identity;
             }

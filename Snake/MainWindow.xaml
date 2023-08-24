@@ -11,8 +11,8 @@
         Foreground="{StaticResource TextColor}"
         FontFamily="{StaticResource MainFont}"
         WindowStartupLocation="CenterScreen"
-        Icon = "Assets/icon.ico"
-        PreviewKeyDown="Windown_PreviewKeydown"
+        Icon = "assets/icon.ico"
+        PreviewKeyDown="Windown_Previewkeydown"
         KeyDown="Windown_Keydown">
     <Viewbox>
         <Grid>

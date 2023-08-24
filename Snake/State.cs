@@ -10,19 +10,19 @@ namespace Snake
     {
         public int Rows { get; }
         public int Cols { get; }
-        public Map[,] Map { get; }
+        public Map[,] Grid { get; }
         public Direction Dir { get; private set; }
         public int score { get; private set; }
         public bool gameover { get; private set; }
         private readonly LinkedList<Direction> dirChange = new LinkedList<Direction>();
-        private readonly LinkedList<Position> position = new LinkedList<Position>();
+        private readonly LinkedList<Position> snakePositions = new LinkedList<Position>();
         private readonly Random random = new Random();
 
         public State(int rows, int cols)
         {
-            rows = Rows;
-            cols = Cols;
-            Map = new Map[rows, cols];
+            Rows = rows;
+            Cols = cols;
+            Grid = new Map[rows, cols];
             Dir = Direction.Right;
 
             AddSnake();
@@ -32,11 +32,13 @@ namespace Snake
         private void AddSnake()
             {
             int r = Rows / 2;
+
             for (int c=1; c<=3; c++)
             {
-                Map[r, c] = Snake.Map.Snake;
-                position.AddFirst(new  Position(r, c));
+                Grid[r, c] = Snake.Map.Snake;
+                snakePositions.AddFirst(new Position(r, c));
             }
+
             }
         private IEnumerable<Position> EmptyPosition()
         {
@@ -44,7 +46,7 @@ namespace Snake
             {
                 for (int c=0; c< Cols; c++)
                 {
-                    if (Map[r,c] == Snake.Map.Empty)
+                    if (Grid[r,c] == Snake.Map.Empty)
                     {
                         yield return new Position(r, c);
                     }
@@ -59,30 +61,30 @@ namespace Snake
                 return;
             }
             Position pos = empty[random.Next(empty.Count)];
-            Map[pos.Row, pos.Col] = Snake.Map.Food;
+            Grid[pos.Row, pos.Col] = Snake.Map.Food;
         }
         public Position HeadPosition()
         {
-            return position.First.Value;
+            return snakePositions.First.Value;
         }
         public Position TailPosition()
         {
-            return position.Last.Value;
+            return snakePositions.Last.Value;
         }
         public IEnumerable<Position> SnakePosition()
         {
-            return position;
+            return snakePositions;
         }
         public void AddHead(Position pos)
         {
-            position.AddFirst(pos);
-            Map[pos.Row, pos.Col] = Snake.Map.Snake;
+            snakePositions.AddFirst(pos);
+            Grid[pos.Row, pos.Col] = Snake.Map.Snake;
         }
         public void RemoveTail()
         {
-            Position tail = position.Last.Value;
-            Map[tail.Row, tail.Col] = Snake.Map.Empty;
-            position.RemoveLast();
+            Position tail = snakePositions.Last.Value;
+            Grid[tail.Row, tail.Col] = Snake.Map.Empty;
+            snakePositions.RemoveLast();
         }
         private Direction GetLastDirection()
         {
@@ -121,7 +123,7 @@ namespace Snake
             {
                 return Snake.Map.Empty;
             }
-            return Map[headpos.Row, headpos.Col];
+            return Grid[headpos.Row, headpos.Col];
         }
         public void Move ()
         {
